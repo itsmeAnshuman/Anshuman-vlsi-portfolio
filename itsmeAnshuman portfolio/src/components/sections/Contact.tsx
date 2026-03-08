@@ -1,6 +1,7 @@
+import emailjs from "@emailjs/browser";
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import emailjs from "@emailjs/browser";
+
 
 import { EarthCanvas } from "../canvas";
 import { github } from "../../assets";
@@ -42,10 +43,8 @@ const Contact = () => {
         emailjsConfig.serviceId,
         emailjsConfig.templateId,
         {
-          form_name: form.name,
-          to_name: config.html.fullName,
-          from_email: form.email,
-          to_email: config.html.email,
+          name: form.name,
+          email: form.email,
           message: form.message,
         },
         emailjsConfig.accessToken
