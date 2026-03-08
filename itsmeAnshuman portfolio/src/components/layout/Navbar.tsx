@@ -61,7 +61,7 @@ const Navbar = () => {
         {/* Logo + Name */}
         <Link
           to="/"
-          className="flex items-center gap-2 flex-1 min-w-0 mr-4"
+          className="flex items-center gap-2 flex-shrink-0 mr-4"
           onClick={() => { window.scrollTo(0, 0); }}
         >
           <img src={logo} alt="logo" className="h-9 w-9 object-contain flex-shrink-0" />
@@ -72,7 +72,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop nav links */}
-        <ul className="hidden list-none flex-row gap-10 sm:flex">
+        <ul className="hidden list-none flex-row gap-10 sm:flex flex-1 justify-center flex-shrink-0">
           {navLinks.map((nav) => (
             <li
               key={nav.id}
@@ -86,10 +86,10 @@ const Navbar = () => {
         </ul>
 
         {/* Desktop right: github icon | linkedin | phone */}
-        <div className="hidden sm:flex items-center gap-4 overflow-hidden">
+        <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
           <a
             href={`mailto:${config.html.email}`}
-            className="text-secondary hover:text-white text-[14px] font-medium truncate max-w-[180px]"
+            className="text-secondary hover:text-white text-[14px] font-medium"
             title={config.html.email}
           >
             {config.html.email}
