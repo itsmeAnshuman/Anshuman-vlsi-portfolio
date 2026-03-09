@@ -68,9 +68,41 @@ const About = () => {
           <div className="mt-6">
             <h3 className="text-white text-[18px] font-semibold">Certifications</h3>
             <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-              {config.certifications.map((c, i) => (
-                <li key={i} className="rounded-md bg-tertiary px-4 py-2 text-sm text-white-100">{c}</li>
-              ))}
+              {config.certifications.map((c, i) => {
+                const name = typeof c === "string" ? c : c.name;
+                const url = typeof c === "string" ? null : c.url;
+                return (
+                  <li key={i} className="rounded-md bg-tertiary px-4 py-2 text-sm text-white-100 flex flex-col gap-1">
+                    <span>{name}</span>
+                    {url && (
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "4px",
+                          fontSize: "11px",
+                          color: "#915EFF",
+                          fontWeight: 600,
+                          letterSpacing: "0.5px",
+                          textDecoration: "none",
+                          marginTop: "2px",
+                          transition: "color 0.2s",
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.color = "#00f5ff")}
+                        onMouseLeave={e => (e.currentTarget.style.color = "#915EFF")}
+                      >
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+                        </svg>
+                        Show Credential
+                      </a>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
 
             <h3 className="mt-6 text-white text-[18px] font-semibold">Achievements</h3>

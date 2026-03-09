@@ -42,7 +42,7 @@ type TConfig = {
     works: Required<TSection>;
     educationText: string;
   };
-  certifications: string[];
+  certifications: { name: string; url?: string }[];
   achievements: string[];
 };
 
@@ -65,9 +65,18 @@ export const config: TConfig = {
     ],
   },
   certifications: [
-    "SystemVerilog for Verification Part 1: Fundamentals — Udemy (Aug 2024)",
-    "SystemVerilog for Verification Part 2: Protocol Verification — Udemy",
-    "Verification Series Part 3: UVM Essentials — Udemy (Jun 2025)",
+    {
+      name: "Verification Series Part 3: UVM Essentials — Udemy (Jun 2025)",
+      url: "https://www.udemy.com/certificate/UC-4f357993-5af9-47f5-961b-de6bbdf346fd/",
+    },
+    {
+      name: "SystemVerilog for Verification Part 2: Protocol Verification — Udemy",
+      url: "https://udemy-certificate.s3.amazonaws.com/pdf/UC-c2210392-f778-48e6-8e97-b15e64dbdc1c.pdf",
+    },
+    {
+      name: "SystemVerilog for Verification Part 1: Fundamentals — Udemy (Aug 2024)",
+      url: "https://www.udemy.com/certificate/UC-2002d464-2145-41d2-a4c4-ea21b8c1dee2",
+    },
   ],
   achievements: [
     "Coordinator, Core Electronics Wing — House of Geeks, IIIT Ranchi (Dec 2023 – Sep 2024)",
