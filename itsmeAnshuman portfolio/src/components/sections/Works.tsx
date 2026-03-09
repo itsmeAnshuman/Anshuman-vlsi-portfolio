@@ -20,6 +20,21 @@ const useIsMobile = () => {
 
 const projectsData = [
   {
+    title: "AXI4-Lite Memory Module",
+    date: "JAN 2026",
+    bullets: [
+      "Designed a parameterized AXI4-Lite slave memory module in SystemVerilog supporting 32-bit data transactions and memory-mapped addressing.",
+      "Implemented AXI4-Lite protocol handshake mechanisms (AWVALID/AWREADY, WVALID/WREADY, ARVALID/ARREADY) ensuring compliant read and write transactions.",
+      "Developed separate FSMs for read and write channels to manage address capture, data transfer, and response generation.",
+      "Implemented multi-block memory architecture (4 × 64 × 32-bit) with address decoding for block selection.",
+      "Enabled byte-level write operations using WSTRB signals, supporting partial data updates within memory words.",
+      "Verified functionality using a Verilog-based testbench, validating read/write transactions and protocol responses through waveform analysis.",
+    ],
+    visual: "axi4",
+    stack: ["SystemVerilog", "Verilog HDL", "AXI4-Lite", "Xilinx Vivado"],
+    github: "https://github.com/itsmeAnshuman/AXI4-LITE-Memory-using-verilog",
+  },
+  {
     title: "1X3 Router RTL Design & Verification",
     date: "SEP 2025",
     bullets: [
@@ -79,6 +94,21 @@ const projectsData = [
     stack: ["Verilog HDL", "SystemVerilog", "CDC", "Xilinx Vivado"],
     github: "https://github.com/itsmeAnshuman/Asynchronous-FIFO-using-System-Verification",
   },
+  {
+    title: "Pipelined MIPS32 Processor",
+    date: "AUG 2024",
+    bullets: [
+      "Designed a 5-stage pipelined MIPS32 processor in Verilog implementing Instruction Fetch (IF), Decode (ID), Execute (EX), Memory (MEM), and Write-Back (WB) stages.",
+      "Implemented two-phase clocking architecture (clk1, clk2) to coordinate pipeline execution and maintain stage timing separation.",
+      "Developed pipeline registers (IF/ID, ID/EX, EX/MEM, MEM/WB) to enable instruction flow and data propagation across pipeline stages.",
+      "Implemented support for R-type, immediate, load/store, and branch instructions including ADD, SUB, AND, OR, SLT, MUL, LW, SW, BEQZ, and BNEQZ.",
+      "Designed branch evaluation and control logic to manage conditional branching and maintain correct program flow.",
+      "Integrated 32×32 register file and 1024-word memory, and verified processor functionality using assembly instruction sequences and waveform simulation.",
+    ],
+    visual: "mips",
+    stack: ["Verilog HDL", "MIPS32", "Pipelining", "Xilinx Vivado"],
+    github: "https://github.com/itsmeAnshuman/MIPS-32-bit-processor-implementaion",
+  },
 ];
 
 /* ── Animated SVG visuals ── */
@@ -95,8 +125,8 @@ const ProjectVisual = ({ type }: { type: string }) => {
   };
 
   if (isMobile) {
-    const colors: Record<string, string> = { router: "#00f5ff", apb: "#915EFF", uart: "#00ff88", fifo: "#f5a623" };
-    const labels: Record<string, string> = { router: "1×3 ROUTER", apb: "APB RAM", uart: "UART", fifo: "ASYNC FIFO" };
+    const colors: Record<string, string> = { router: "#00f5ff", axi4: "#ff6b9d", apb: "#915EFF", uart: "#00ff88", fifo: "#f5a623", mips: "#ffd93d" };
+    const labels: Record<string, string> = { router: "1×3 ROUTER", axi4: "AXI4-LITE", apb: "APB RAM", uart: "UART", fifo: "ASYNC FIFO", mips: "MIPS32" };
     const color = colors[type] || "#00f5ff";
     return (
       <div style={{ ...base, background: "linear-gradient(135deg, #060e1c 0%, #0a1628 100%)" }}>
@@ -109,41 +139,196 @@ const ProjectVisual = ({ type }: { type: string }) => {
 
   if (type === "router") return (
     <div style={base}>
-      <svg width="200" height="180" viewBox="0 0 200 180">
+      <svg width="260" height="180" viewBox="0 0 260 180" style={{ margin: "0 auto", display: "block" }}>
         <defs>
-          <radialGradient id="rg1" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#00f5ff" stopOpacity="0.9" />
-            <stop offset="60%" stopColor="#915EFF" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#1a0533" stopOpacity="0.3" />
-          </radialGradient>
           <filter id="glow1">
+            <feGaussianBlur stdDeviation="2.5" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+          <marker id="arrR" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#00f5ff" />
+          </marker>
+          <marker id="arrRG" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#00ff88" />
+          </marker>
+        </defs>
+
+        {/* INPUT / Modem block */}
+        <rect x="4" y="68" width="46" height="44" rx="6"
+          fill="rgba(255,107,157,0.08)" stroke="#ff6b9d" strokeWidth="1.5" filter="url(#glow1)">
+          <animate attributeName="stroke-opacity" values="1;0.4;1" dur="1.8s" repeatCount="indefinite" />
+        </rect>
+        <text x="27" y="86" textAnchor="middle" fontSize="8" fill="#ff6b9d" fontFamily="monospace" fontWeight="bold">INPUT</text>
+        <text x="27" y="98" textAnchor="middle" fontSize="7" fill="rgba(255,107,157,0.6)" fontFamily="monospace">packet</text>
+        <text x="27" y="108" textAnchor="middle" fontSize="7" fill="rgba(255,107,157,0.45)" fontFamily="monospace">stream</text>
+        {/* Incoming data dot */}
+        <circle r="3" fill="#ff6b9d" opacity="0.9" filter="url(#glow1)">
+          <animateMotion dur="1.2s" repeatCount="indefinite" path="M4,90 L4,90" />
+        </circle>
+
+        {/* Arrow: Input → Reg */}
+        <line x1="50" y1="90" x2="70" y2="90"
+          stroke="#ff6b9d" strokeWidth="1.4" strokeDasharray="4 2" markerEnd="url(#arrR)">
+          <animate attributeName="stroke-dashoffset" values="0;-12" dur="0.7s" repeatCount="indefinite" />
+        </line>
+        <circle r="2.5" fill="#ff6b9d" opacity="0.85" filter="url(#glow1)">
+          <animateMotion dur="0.9s" repeatCount="indefinite" path="M50,90 L70,90" />
+        </circle>
+
+        {/* REGISTER block */}
+        <rect x="70" y="62" width="48" height="56" rx="6"
+          fill="rgba(255,217,61,0.07)" stroke="#ffd93d" strokeWidth="1.5" filter="url(#glow1)">
+          <animate attributeName="stroke-opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" />
+        </rect>
+        <text x="94" y="82" textAnchor="middle" fontSize="8" fill="#ffd93d" fontFamily="monospace" fontWeight="bold">REG</text>
+        <text x="94" y="94" textAnchor="middle" fontSize="7" fill="rgba(255,217,61,0.65)" fontFamily="monospace">header</text>
+        <text x="94" y="105" textAnchor="middle" fontSize="7" fill="rgba(255,217,61,0.5)" fontFamily="monospace">parity</text>
+        <text x="94" y="113" textAnchor="middle" fontSize="6.5" fill="rgba(255,217,61,0.35)" fontFamily="monospace">timeout</text>
+
+        {/* Arrow: Reg → FSM */}
+        <line x1="118" y1="90" x2="138" y2="90"
+          stroke="#ffd93d" strokeWidth="1.4" strokeDasharray="4 2" markerEnd="url(#arrR)">
+          <animate attributeName="stroke-dashoffset" values="0;-12" dur="0.8s" repeatCount="indefinite" />
+        </line>
+        <circle r="2.5" fill="#ffd93d" opacity="0.85" filter="url(#glow1)">
+          <animateMotion dur="1s" repeatCount="indefinite" path="M118,90 L138,90" />
+        </circle>
+
+        {/* FSM block — center */}
+        <rect x="138" y="58" width="52" height="64" rx="7"
+          fill="rgba(145,94,255,0.12)" stroke="#915EFF" strokeWidth="2" filter="url(#glow1)">
+          <animate attributeName="stroke-opacity" values="1;0.45;1" dur="1.6s" repeatCount="indefinite" />
+        </rect>
+        <text x="164" y="80" textAnchor="middle" fontSize="9" fill="#fff" fontFamily="monospace" fontWeight="bold">FSM</text>
+        <text x="164" y="93" textAnchor="middle" fontSize="7" fill="rgba(145,94,255,0.8)" fontFamily="monospace">addr</text>
+        <text x="164" y="104" textAnchor="middle" fontSize="7" fill="rgba(145,94,255,0.65)" fontFamily="monospace">decode</text>
+        <text x="164" y="114" textAnchor="middle" fontSize="6.5" fill="rgba(145,94,255,0.45)" fontFamily="monospace">ctrl</text>
+
+        {/* 3 FIFO outputs — top-right, mid-right, bottom-right */}
+        {[
+          { label: "OUT0", sub: "FIFO0", y: 28,  color: "#00f5ff" },
+          { label: "OUT1", sub: "FIFO1", y: 82,  color: "#00f5ff" },
+          { label: "OUT2", sub: "FIFO2", y: 136, color: "#00f5ff" },
+        ].map(({ label, sub, y, color }, i) => (
+          <g key={i}>
+            {/* Line from FSM right edge to FIFO */}
+            <line
+              x1="190" y1="90"
+              x2="220" y2={y + 16}
+              stroke={color} strokeWidth="1.3" strokeDasharray="4 2" markerEnd="url(#arrRG)" opacity="0.7">
+              <animate attributeName="stroke-dashoffset" values="0;-12" dur={`${1 + i * 0.3}s`} repeatCount="indefinite" />
+            </line>
+            {/* Moving packet dot */}
+            <circle r="3" fill={color} opacity="0.9" filter="url(#glow1)">
+              <animateMotion dur={`${1.2 + i * 0.35}s`} begin={`${i * 0.4}s`} repeatCount="indefinite"
+                path={`M190,90 L220,${y + 16}`} />
+            </circle>
+            {/* FIFO box */}
+            <rect x="220" y={y} width="36" height="32" rx="5"
+              fill={`${color}0d`} stroke={color} strokeWidth="1.3" filter="url(#glow1)">
+              <animate attributeName="stroke-opacity" values="1;0.35;1" dur={`${1.5 + i * 0.4}s`} repeatCount="indefinite" />
+            </rect>
+            <text x="238" y={y + 14} textAnchor="middle" fontSize="8" fill={color} fontFamily="monospace" fontWeight="bold">{label}</text>
+            <text x="238" y={y + 25} textAnchor="middle" fontSize="6.5" fill={`${color}88`} fontFamily="monospace">{sub}</text>
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
+
+  if (type === "axi4") return (
+    <div style={base}>
+      <svg width="260" height="180" viewBox="0 0 260 180" style={{ margin: "0 auto", display: "block" }}>
+        <defs>
+          <filter id="glowAxi">
             <feGaussianBlur stdDeviation="3" result="blur" />
             <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
+          <marker id="arrAxi" markerWidth="7" markerHeight="7" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#ff6b9d" />
+          </marker>
+          <marker id="arrAxiB" markerWidth="7" markerHeight="7" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#915EFF" />
+          </marker>
+          <marker id="arrAxiC" markerWidth="7" markerHeight="7" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#00f5ff" />
+          </marker>
         </defs>
-        <circle cx="100" cy="90" r="22" fill="url(#rg1)" filter="url(#glow1)" opacity="0.95">
-          <animate attributeName="r" values="20;24;20" dur="2s" repeatCount="indefinite" />
+
+        {/* Master block — larger, vertically centered */}
+        <rect x="10" y="28" width="72" height="110" rx="9"
+          fill="rgba(255,107,157,0.1)" stroke="#ff6b9d" strokeWidth="2" filter="url(#glowAxi)">
+          <animate attributeName="stroke-opacity" values="1;0.45;1" dur="2s" repeatCount="indefinite" />
+        </rect>
+        <text x="46" y="72" textAnchor="middle" fontSize="11" fill="#ff6b9d" fontFamily="monospace" fontWeight="bold">AXI4</text>
+        <text x="46" y="88" textAnchor="middle" fontSize="11" fill="#ff6b9d" fontFamily="monospace" fontWeight="bold">MASTER</text>
+        <text x="46" y="106" textAnchor="middle" fontSize="8" fill="rgba(255,107,157,0.6)" fontFamily="monospace">M_AXI</text>
+        <text x="46" y="120" textAnchor="middle" fontSize="7.5" fill="rgba(255,107,157,0.4)" fontFamily="monospace">initiator</text>
+
+        {/* Slave block — larger, vertically centered */}
+        <rect x="178" y="18" width="72" height="130" rx="9"
+          fill="rgba(0,255,136,0.08)" stroke="#00ff88" strokeWidth="2" filter="url(#glowAxi)">
+          <animate attributeName="stroke-opacity" values="1;0.4;1" dur="2.4s" repeatCount="indefinite" />
+        </rect>
+        <text x="214" y="58" textAnchor="middle" fontSize="11" fill="#00ff88" fontFamily="monospace" fontWeight="bold">SLAVE</text>
+        <text x="214" y="74" textAnchor="middle" fontSize="8" fill="rgba(0,255,136,0.75)" fontFamily="monospace">4×64×32-bit</text>
+        <text x="214" y="89" textAnchor="middle" fontSize="8" fill="rgba(0,255,136,0.6)" fontFamily="monospace">MEM ARRAY</text>
+        <text x="214" y="106" textAnchor="middle" fontSize="7.5" fill="rgba(0,255,136,0.45)" fontFamily="monospace">addr decode</text>
+        <text x="214" y="120" textAnchor="middle" fontSize="7.5" fill="rgba(0,255,136,0.4)" fontFamily="monospace">WSTRB</text>
+        <text x="214" y="134" textAnchor="middle" fontSize="7.5" fill="rgba(0,255,136,0.35)" fontFamily="monospace">RD/WR FSM</text>
+
+        {/* AW — Write Address */}
+        <line x1="82" y1="52" x2="178" y2="52"
+          stroke="#ff6b9d" strokeWidth="1.6" strokeDasharray="5 3" markerEnd="url(#arrAxi)">
+          <animate attributeName="stroke-dashoffset" values="0;-16" dur="1s" repeatCount="indefinite" />
+        </line>
+        <text x="130" y="47" textAnchor="middle" fontSize="7.5" fill="rgba(255,107,157,0.9)" fontFamily="monospace">AW (addr)</text>
+        <circle r="3.5" fill="#ff6b9d" opacity="0.9" filter="url(#glowAxi)">
+          <animateMotion dur="1.3s" repeatCount="indefinite" path="M82,52 L178,52" />
         </circle>
-        {[[-60, -50], [70, -50], [0, 65]].map(([dx, dy], i) => (
-          <g key={i}>
-            <line x1="100" y1="90" x2={100 + dx} y2={90 + dy}
-              stroke="#00f5ff" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.5">
-              <animate attributeName="stroke-dashoffset" values="0;-14" dur={`${1.2 + i * 0.3}s`} repeatCount="indefinite" />
-            </line>
-            <circle cx={100 + dx} cy={90 + dy} r="12" fill="#0a1628" stroke="#915EFF" strokeWidth="1.5" filter="url(#glow1)">
-              <animate attributeName="stroke" values="#915EFF;#00f5ff;#915EFF" dur={`${1.5 + i * 0.4}s`} repeatCount="indefinite" />
-            </circle>
-            <text x={100 + dx} y={90 + dy + 4} textAnchor="middle" fontSize="8" fill="#00ff88" fontFamily="monospace">{`OUT${i}`}</text>
-            <circle r="3" fill="#00f5ff" opacity="0.9">
-              <animateMotion dur={`${1.4 + i * 0.35}s`} repeatCount="indefinite"
-                path={`M100,90 L${100 + dx},${90 + dy}`} />
-            </circle>
-          </g>
-        ))}
-        <text x="100" y="94" textAnchor="middle" fontSize="9" fill="#fff" fontFamily="monospace" fontWeight="bold">FSM</text>
-        {[[-60, -50], [70, -50], [0, 65]].map(([dx, dy], i) => (
-          <text key={i} x={100 + dx} y={90 + dy + 22} textAnchor="middle" fontSize="7" fill="rgba(0,245,255,0.6)" fontFamily="monospace">FIFO{i}</text>
-        ))}
+
+        {/* W — Write Data */}
+        <line x1="82" y1="72" x2="178" y2="72"
+          stroke="#ff6b9d" strokeWidth="1.6" strokeDasharray="5 3" markerEnd="url(#arrAxi)">
+          <animate attributeName="stroke-dashoffset" values="0;-16" dur="1.2s" repeatCount="indefinite" />
+        </line>
+        <text x="130" y="67" textAnchor="middle" fontSize="7.5" fill="rgba(255,107,157,0.9)" fontFamily="monospace">W (data)</text>
+        <circle r="3.5" fill="#ff6b9d" opacity="0.85" filter="url(#glowAxi)">
+          <animateMotion dur="1.6s" repeatCount="indefinite" path="M82,72 L178,72" />
+        </circle>
+
+        {/* B — Write Response (back) */}
+        <line x1="178" y1="92" x2="82" y2="92"
+          stroke="#915EFF" strokeWidth="1.6" strokeDasharray="5 3" markerEnd="url(#arrAxiB)">
+          <animate attributeName="stroke-dashoffset" values="0;-16" dur="1.1s" repeatCount="indefinite" />
+        </line>
+        <text x="130" y="87" textAnchor="middle" fontSize="7.5" fill="rgba(145,94,255,0.95)" fontFamily="monospace">B (resp)</text>
+        <circle r="3.5" fill="#915EFF" opacity="0.85" filter="url(#glowAxi)">
+          <animateMotion dur="1.5s" repeatCount="indefinite" path="M178,92 L82,92" />
+        </circle>
+
+        {/* AR — Read Address */}
+        <line x1="82" y1="112" x2="178" y2="112"
+          stroke="#00f5ff" strokeWidth="1.6" strokeDasharray="5 3" markerEnd="url(#arrAxiC)">
+          <animate attributeName="stroke-dashoffset" values="0;-16" dur="0.9s" repeatCount="indefinite" />
+        </line>
+        <text x="130" y="107" textAnchor="middle" fontSize="7.5" fill="rgba(0,245,255,0.9)" fontFamily="monospace">AR (addr)</text>
+        <circle r="3.5" fill="#00f5ff" opacity="0.85" filter="url(#glowAxi)">
+          <animateMotion dur="1.3s" repeatCount="indefinite" path="M82,112 L178,112" />
+        </circle>
+
+        {/* R — Read Data (back) */}
+        <line x1="178" y1="132" x2="82" y2="132"
+          stroke="#00f5ff" strokeWidth="1.6" strokeDasharray="5 3" markerEnd="url(#arrAxiC)">
+          <animate attributeName="stroke-dashoffset" values="0;-16" dur="1.05s" repeatCount="indefinite" />
+        </line>
+        <text x="130" y="127" textAnchor="middle" fontSize="7.5" fill="rgba(0,245,255,0.9)" fontFamily="monospace">R (data)</text>
+        <circle r="3.5" fill="#00f5ff" opacity="0.85" filter="url(#glowAxi)">
+          <animateMotion dur="1.4s" repeatCount="indefinite" path="M178,132 L82,132" />
+        </circle>
+
+        {/* Bottom label */}
+        <text x="130" y="168" textAnchor="middle" fontSize="7" fill="rgba(255,107,157,0.45)" fontFamily="monospace">AWVALID · WVALID · ARVALID · handshake</text>
       </svg>
     </div>
   );
@@ -193,77 +378,253 @@ const ProjectVisual = ({ type }: { type: string }) => {
 
   if (type === "uart") return (
     <div style={base}>
-      <svg width="210" height="180" viewBox="0 0 210 180">
+      <svg width="220" height="180" viewBox="0 0 220 180">
         <defs>
           <filter id="glow3">
-            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feGaussianBlur stdDeviation="2.5" result="blur" />
             <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
+          <marker id="arrUart" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#00ff88" />
+          </marker>
         </defs>
-        <rect x="10" y="70" width="60" height="40" rx="6" fill="rgba(0,245,255,0.08)" stroke="#00f5ff" strokeWidth="1.5" filter="url(#glow3)" />
-        <text x="40" y="87" textAnchor="middle" fontSize="10" fill="#00f5ff" fontFamily="monospace" fontWeight="bold">TX</text>
-        <text x="40" y="101" textAnchor="middle" fontSize="7" fill="rgba(0,245,255,0.6)" fontFamily="monospace">Transmit</text>
-        <rect x="140" y="70" width="60" height="40" rx="6" fill="rgba(145,94,255,0.08)" stroke="#915EFF" strokeWidth="1.5" filter="url(#glow3)" />
-        <text x="170" y="87" textAnchor="middle" fontSize="10" fill="#915EFF" fontFamily="monospace" fontWeight="bold">RX</text>
-        <text x="170" y="101" textAnchor="middle" fontSize="7" fill="rgba(145,94,255,0.6)" fontFamily="monospace">Receive</text>
-        {[0,1,2,3,4,5,6,7].map((i) => {
-          const bits = [0,1,0,1,1,0,1,0];
-          const x = 75 + i * 8;
-          const y = bits[i] ? 78 : 102;
-          const nextBit = bits[(i + 1) % 8];
-          const ny = nextBit ? 78 : 102;
-          return (
+
+        {/* TX block */}
+        <rect x="8" y="20" width="58" height="70" rx="7"
+          fill="rgba(0,245,255,0.08)" stroke="#00f5ff" strokeWidth="1.5" filter="url(#glow3)">
+          <animate attributeName="stroke-opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" />
+        </rect>
+        <text x="37" y="42" textAnchor="middle" fontSize="10" fill="#00f5ff" fontFamily="monospace" fontWeight="bold">TX</text>
+        <text x="37" y="56" textAnchor="middle" fontSize="7" fill="rgba(0,245,255,0.7)" fontFamily="monospace">Shift Reg</text>
+        <text x="37" y="68" textAnchor="middle" fontSize="7" fill="rgba(0,245,255,0.55)" fontFamily="monospace">Baud Gen</text>
+        <text x="37" y="80" textAnchor="middle" fontSize="7" fill="rgba(0,245,255,0.4)" fontFamily="monospace">FSM</text>
+
+        {/* RX block */}
+        <rect x="154" y="20" width="58" height="70" rx="7"
+          fill="rgba(145,94,255,0.08)" stroke="#915EFF" strokeWidth="1.5" filter="url(#glow3)">
+          <animate attributeName="stroke-opacity" values="1;0.4;1" dur="2.3s" repeatCount="indefinite" />
+        </rect>
+        <text x="183" y="42" textAnchor="middle" fontSize="10" fill="#915EFF" fontFamily="monospace" fontWeight="bold">RX</text>
+        <text x="183" y="56" textAnchor="middle" fontSize="7" fill="rgba(145,94,255,0.7)" fontFamily="monospace">Shift Reg</text>
+        <text x="183" y="68" textAnchor="middle" fontSize="7" fill="rgba(145,94,255,0.55)" fontFamily="monospace">Baud Gen</text>
+        <text x="183" y="80" textAnchor="middle" fontSize="7" fill="rgba(145,94,255,0.4)" fontFamily="monospace">FSM</text>
+
+        {/* Serial data line TX→RX */}
+        <line x1="66" y1="55" x2="154" y2="55"
+          stroke="#00ff88" strokeWidth="1.4" strokeDasharray="5 3" markerEnd="url(#arrUart)">
+          <animate attributeName="stroke-dashoffset" values="0;-16" dur="0.9s" repeatCount="indefinite" />
+        </line>
+        <text x="110" y="50" textAnchor="middle" fontSize="7" fill="rgba(0,255,136,0.8)" fontFamily="monospace">TxD → RxD</text>
+
+        {/* Moving bits */}
+        {[0, 0.3, 0.6].map((delay, i) => (
+          <circle key={i} r="3" fill="#00ff88" opacity="0.85" filter="url(#glow3)">
+            <animateMotion dur="1.5s" begin={`${delay}s`} repeatCount="indefinite" path="M66,55 L154,55" />
+          </circle>
+        ))}
+
+        {/* UART frame diagram */}
+        {/* Frame label */}
+        <text x="110" y="108" textAnchor="middle" fontSize="7" fill="rgba(255,217,61,0.7)" fontFamily="monospace">UART FRAME</text>
+        {/* Frame boxes: START | D0..D7 | PAR | STOP */}
+        {[
+          { label: "S", color: "#ff6b9d", w: 14 },
+          { label: "D0", color: "#00f5ff", w: 14 },
+          { label: "D1", color: "#00f5ff", w: 14 },
+          { label: "D2", color: "#00f5ff", w: 14 },
+          { label: "D3", color: "#00f5ff", w: 14 },
+          { label: "P",  color: "#915EFF", w: 14 },
+          { label: "ST", color: "#00ff88", w: 14 },
+        ].reduce<{ els: JSX.Element[], x: number }>((acc, { label, color, w }, i) => {
+          const x = acc.x;
+          acc.els.push(
             <g key={i}>
-              <line x1={x} y1={y} x2={x+8} y2={y} stroke="#00ff88" strokeWidth="1.5">
-                <animate attributeName="opacity" values="1;0.4;1" dur={`${0.8+i*0.1}s`} repeatCount="indefinite" />
-              </line>
-              {y !== ny && <line x1={x+8} y1={y} x2={x+8} y2={ny} stroke="#00ff88" strokeWidth="1.5" opacity="0.5" />}
+              <rect x={x} y="113" width={w} height="16" rx="2"
+                fill={`${color}15`} stroke={color} strokeWidth="1" opacity="0.85">
+                <animate attributeName="fill-opacity" values="0.15;0.3;0.15" dur={`${1+i*0.2}s`} repeatCount="indefinite" />
+              </rect>
+              <text x={x + w/2} y="124" textAnchor="middle" fontSize="6" fill={color} fontFamily="monospace">{label}</text>
             </g>
           );
-        })}
-        <text x="105" y="125" textAnchor="middle" fontSize="8" fill="rgba(0,255,136,0.7)" fontFamily="monospace">115200 baud</text>
-        <text x="40" y="130" textAnchor="middle" fontSize="7" fill="rgba(0,245,255,0.5)" fontFamily="monospace">START/STOP</text>
-        <text x="170" y="130" textAnchor="middle" fontSize="7" fill="rgba(145,94,255,0.5)" fontFamily="monospace">PARITY</text>
-        {[0,1,2,3,4,5].map(i => (
-          <g key={i}>
-            <line x1={75+i*10} y1="145" x2={75+i*10+5} y2="145" stroke="rgba(0,245,255,0.35)" strokeWidth="1" />
-            <line x1={75+i*10+5} y1="135" x2={75+i*10+5} y2="155" stroke="rgba(0,245,255,0.35)" strokeWidth="1" />
-            <line x1={75+i*10+5} y1="155" x2={75+i*10+10} y2="155" stroke="rgba(0,245,255,0.35)" strokeWidth="1" />
-          </g>
-        ))}
-        <text x="10" y="160" fontSize="7" fill="rgba(0,245,255,0.4)" fontFamily="monospace">clk</text>
+          acc.x += w + 1;
+          return acc;
+        }, { els: [], x: 12 }).els}
+
+        {/* Baud rate label */}
+        <text x="110" y="148" textAnchor="middle" fontSize="7.5" fill="rgba(0,255,136,0.6)" fontFamily="monospace">115200 baud  |  8N1</text>
+
+        {/* Parity & stop labels */}
+        <text x="110" y="162" textAnchor="middle" fontSize="6.5" fill="rgba(145,94,255,0.5)" fontFamily="monospace">START · DATA[7:0] · PARITY · STOP</text>
       </svg>
     </div>
   );
 
   if (type === "fifo") return (
     <div style={base}>
-      <svg width="210" height="180" viewBox="0 0 210 180">
+      <svg width="220" height="180" viewBox="0 0 220 180">
         <defs>
           <filter id="glow4">
+            <feGaussianBlur stdDeviation="2.5" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+          <marker id="arrFifoR" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#00f5ff" />
+          </marker>
+          <marker id="arrFifoG" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#915EFF" />
+          </marker>
+        </defs>
+
+        {/* WR Domain block */}
+        <rect x="5" y="15" width="58" height="80" rx="7"
+          fill="rgba(0,245,255,0.07)" stroke="#00f5ff" strokeWidth="1.5" filter="url(#glow4)">
+          <animate attributeName="stroke-opacity" values="1;0.4;1" dur="1.8s" repeatCount="indefinite" />
+        </rect>
+        <text x="34" y="34" textAnchor="middle" fontSize="8" fill="#00f5ff" fontFamily="monospace" fontWeight="bold">WRITE</text>
+        <text x="34" y="46" textAnchor="middle" fontSize="7" fill="rgba(0,245,255,0.7)" fontFamily="monospace">WR_CLK</text>
+        <text x="34" y="58" textAnchor="middle" fontSize="7" fill="rgba(0,245,255,0.55)" fontFamily="monospace">WR_PTR</text>
+        <text x="34" y="70" textAnchor="middle" fontSize="7" fill="rgba(0,245,255,0.4)" fontFamily="monospace">WR_EN</text>
+        <text x="34" y="84" textAnchor="middle" fontSize="7" fill="#00ff88" fontFamily="monospace">FULL</text>
+
+        {/* RD Domain block */}
+        <rect x="157" y="15" width="58" height="80" rx="7"
+          fill="rgba(145,94,255,0.07)" stroke="#915EFF" strokeWidth="1.5" filter="url(#glow4)">
+          <animate attributeName="stroke-opacity" values="1;0.4;1" dur="2.2s" repeatCount="indefinite" />
+        </rect>
+        <text x="186" y="34" textAnchor="middle" fontSize="8" fill="#915EFF" fontFamily="monospace" fontWeight="bold">READ</text>
+        <text x="186" y="46" textAnchor="middle" fontSize="7" fill="rgba(145,94,255,0.7)" fontFamily="monospace">RD_CLK</text>
+        <text x="186" y="58" textAnchor="middle" fontSize="7" fill="rgba(145,94,255,0.55)" fontFamily="monospace">RD_PTR</text>
+        <text x="186" y="70" textAnchor="middle" fontSize="7" fill="rgba(145,94,255,0.4)" fontFamily="monospace">RD_EN</text>
+        <text x="186" y="84" textAnchor="middle" fontSize="7" fill="#ff6b9d" fontFamily="monospace">EMPTY</text>
+
+        {/* Dual-port memory in center */}
+        <rect x="78" y="22" width="64" height="66" rx="6"
+          fill="rgba(0,255,136,0.06)" stroke="#00ff88" strokeWidth="1.5" filter="url(#glow4)">
+          <animate attributeName="stroke-opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
+        </rect>
+        <text x="110" y="42" textAnchor="middle" fontSize="8" fill="#00ff88" fontFamily="monospace" fontWeight="bold">DUAL</text>
+        <text x="110" y="54" textAnchor="middle" fontSize="8" fill="#00ff88" fontFamily="monospace" fontWeight="bold">PORT</text>
+        <text x="110" y="66" textAnchor="middle" fontSize="7" fill="rgba(0,255,136,0.7)" fontFamily="monospace">MEM</text>
+        <text x="110" y="78" textAnchor="middle" fontSize="7" fill="rgba(0,255,136,0.5)" fontFamily="monospace">8×Depth</text>
+
+        {/* WR → MEM arrow with moving dot */}
+        <line x1="63" y1="45" x2="78" y2="45"
+          stroke="#00f5ff" strokeWidth="1.4" strokeDasharray="4 2" markerEnd="url(#arrFifoR)">
+          <animate attributeName="stroke-dashoffset" values="0;-12" dur="0.8s" repeatCount="indefinite" />
+        </line>
+        <circle r="3" fill="#00f5ff" opacity="0.9" filter="url(#glow4)">
+          <animateMotion dur="1s" repeatCount="indefinite" path="M63,45 L78,45" />
+        </circle>
+
+        {/* MEM → RD arrow with moving dot */}
+        <line x1="142" y1="55" x2="157" y2="55"
+          stroke="#915EFF" strokeWidth="1.4" strokeDasharray="4 2" markerEnd="url(#arrFifoG)">
+          <animate attributeName="stroke-dashoffset" values="0;-12" dur="1s" repeatCount="indefinite" />
+        </line>
+        <circle r="3" fill="#915EFF" opacity="0.9" filter="url(#glow4)">
+          <animateMotion dur="1.3s" repeatCount="indefinite" path="M142,55 L157,55" />
+        </circle>
+
+        {/* Gray code sync bridge below */}
+        <rect x="68" y="108" width="84" height="24" rx="5"
+          fill="rgba(255,217,61,0.07)" stroke="#ffd93d" strokeWidth="1.2" filter="url(#glow4)">
+          <animate attributeName="stroke-opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite" />
+        </rect>
+        <text x="110" y="121" textAnchor="middle" fontSize="7.5" fill="#ffd93d" fontFamily="monospace" fontWeight="bold">Gray Code Sync</text>
+        <text x="110" y="131" textAnchor="middle" fontSize="6" fill="rgba(255,217,61,0.55)" fontFamily="monospace">2-stage metastability guard</text>
+
+        {/* Sync lines from domains to bridge */}
+        <line x1="34" y1="95" x2="34" y2="120" stroke="rgba(0,245,255,0.35)" strokeWidth="1" strokeDasharray="3 2">
+          <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.2s" repeatCount="indefinite" />
+        </line>
+        <line x1="34" y1="120" x2="68" y2="120" stroke="rgba(0,245,255,0.35)" strokeWidth="1" />
+        <line x1="186" y1="95" x2="186" y2="120" stroke="rgba(145,94,255,0.35)" strokeWidth="1" strokeDasharray="3 2">
+          <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.5s" repeatCount="indefinite" />
+        </line>
+        <line x1="186" y1="120" x2="152" y2="120" stroke="rgba(145,94,255,0.35)" strokeWidth="1" />
+
+        {/* CDC label */}
+        <text x="110" y="165" textAnchor="middle" fontSize="7" fill="rgba(255,107,157,0.55)" fontFamily="monospace">Clock Domain Crossing (CDC)</text>
+      </svg>
+    </div>
+  );
+
+  if (type === "mips") return (
+    <div style={base}>
+      <svg width="220" height="180" viewBox="0 0 220 180">
+        <defs>
+          <filter id="glowMips">
             <feGaussianBlur stdDeviation="2" result="blur" />
             <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
         </defs>
-        {[0,1,2,3,4,5].map(i => (
-          <rect key={i} x="75" y={20+i*22} width="60" height="18" rx="3"
-            fill={i < 4 ? "rgba(0,245,255,0.12)" : "rgba(10,22,40,0.5)"}
-            stroke={i < 4 ? "rgba(0,245,255,0.4)" : "rgba(145,94,255,0.2)"}
-            strokeWidth="1" filter="url(#glow4)">
-            {i < 4 && <animate attributeName="fill-opacity" values="0.12;0.22;0.12" dur={`${1+i*0.3}s`} repeatCount="indefinite" />}
-          </rect>
+
+        {/* 5 pipeline stage boxes */}
+        {[
+          { label: "IF", sub: "Fetch",    x: 10,  color: "#ffd93d" },
+          { label: "ID", sub: "Decode",   x: 50,  color: "#00f5ff" },
+          { label: "EX", sub: "Execute",  x: 90,  color: "#915EFF" },
+          { label: "MEM",sub: "Memory",   x: 130, color: "#ff6b9d" },
+          { label: "WB", sub: "W-Back",   x: 170, color: "#00ff88" },
+        ].map(({ label, sub, x, color }, i) => (
+          <g key={i}>
+            <rect x={x} y="30" width="36" height="50" rx="5"
+              fill={`${color}0d`} stroke={color} strokeWidth="1.5" filter="url(#glowMips)">
+              <animate attributeName="stroke-opacity" values="1;0.4;1" dur={`${1.4 + i * 0.3}s`} repeatCount="indefinite" />
+            </rect>
+            <text x={x + 18} y="51" textAnchor="middle" fontSize="9" fill={color} fontFamily="monospace" fontWeight="bold">{label}</text>
+            <text x={x + 18} y="64" textAnchor="middle" fontSize="6.5" fill={`${color}88`} fontFamily="monospace">{sub}</text>
+
+            {/* Arrow between stages */}
+            {i < 4 && (
+              <line x1={x + 36} y1="55" x2={x + 50} y2="55"
+                stroke={color} strokeWidth="1.2" strokeDasharray="3 2">
+                <animate attributeName="stroke-dashoffset" values="0;-10" dur="0.8s" repeatCount="indefinite" />
+              </line>
+            )}
+          </g>
         ))}
-        {[0,1,2,3].map(i => (
-          <text key={i} x="105" y={33+i*22} textAnchor="middle" fontSize="8" fill="#00f5ff" fontFamily="monospace">{`D[${3-i}]`}</text>
+
+        {/* Travelling instruction dots across pipeline */}
+        {[
+          { color: "#ffd93d", dur: "2s",   delay: "0s" },
+          { color: "#00f5ff", dur: "2s",   delay: "0.4s" },
+          { color: "#915EFF", dur: "2s",   delay: "0.8s" },
+        ].map(({ color, dur, delay }, i) => (
+          <circle key={i} r="3.5" fill={color} opacity="0.85" filter="url(#glowMips)">
+            <animateMotion dur={dur} begin={delay} repeatCount="indefinite"
+              path="M28,55 L68,55 L108,55 L148,55 L188,55" calcMode="linear" />
+          </circle>
         ))}
-        {[4,5].map(i => (
-          <text key={i} x="105" y={33+i*22} textAnchor="middle" fontSize="8" fill="rgba(145,94,255,0.3)" fontFamily="monospace">empty</text>
+
+        {/* Pipeline registers labels */}
+        {["IF/ID", "ID/EX", "EX/MEM", "MEM/WB"].map((reg, i) => (
+          <text key={i} x={68 + i * 40} y="95" textAnchor="middle"
+            fontSize="6" fill="rgba(255,217,61,0.45)" fontFamily="monospace">{reg}</text>
         ))}
-        <text x="62" y="29" textAnchor="end" fontSize="8" fill="#00ff88" fontFamily="monospace">WR►</text>
-        <text x="148" y="95" textAnchor="start" fontSize="8" fill="#915EFF" fontFamily="monospace">◄RD</text>
-        <text x="20" y="90" fontSize="7" fill="rgba(0,245,255,0.5)" fontFamily="monospace" transform="rotate(-90,20,90)">WR_CLK</text>
-        <text x="190" y="90" fontSize="7" fill="rgba(145,94,255,0.5)" fontFamily="monospace" transform="rotate(90,190,90)">RD_CLK</text>
-        <text x="105" y="165" textAnchor="middle" fontSize="8" fill="rgba(0,255,136,0.6)" fontFamily="monospace">Gray Code Sync</text>
+
+        {/* Two-phase clock */}
+        <text x="110" y="115" textAnchor="middle" fontSize="7.5" fill="rgba(0,245,255,0.7)" fontFamily="monospace">clk1 / clk2  (2-phase)</text>
+
+        {/* Clock waveform clk1 */}
+        {[0,1,2,3,4,5,6,7].map(i => {
+          const x = 30 + i * 20;
+          const hi = i % 2 === 0;
+          return (
+            <g key={i}>
+              <line x1={x} y1={hi ? 128 : 140} x2={x + 20} y2={hi ? 128 : 140}
+                stroke="#ffd93d" strokeWidth="1.2" opacity="0.55">
+                <animate attributeName="opacity" values="0.55;0.25;0.55" dur={`${0.6 + i * 0.05}s`} repeatCount="indefinite" />
+              </line>
+              <line x1={x + 20} y1={hi ? 128 : 140} x2={x + 20} y2={hi ? 140 : 128}
+                stroke="#ffd93d" strokeWidth="1.2" opacity="0.35" />
+            </g>
+          );
+        })}
+        <text x="10" y="133" fontSize="6.5" fill="rgba(255,217,61,0.5)" fontFamily="monospace">clk</text>
+
+        {/* Instruction set hint */}
+        <text x="110" y="165" textAnchor="middle" fontSize="6.5" fill="rgba(145,94,255,0.55)" fontFamily="monospace">ADD SUB AND OR SLT LW SW BEQZ</text>
       </svg>
     </div>
   );
@@ -274,6 +635,10 @@ const ProjectVisual = ({ type }: { type: string }) => {
 const getTagStyle = (tag: string) => {
   if (["SystemVerilog", "UVM"].includes(tag))
     return { bg: "rgba(145,94,255,0.07)", border: "rgba(145,94,255,0.25)", color: "#b48aff", glowColor: "rgba(145,94,255,0.6)" };
+  if (["AXI4-Lite"].includes(tag))
+    return { bg: "rgba(255,107,157,0.07)", border: "rgba(255,107,157,0.25)", color: "#ff6b9d", glowColor: "rgba(255,107,157,0.6)" };
+  if (["MIPS32", "Pipelining"].includes(tag))
+    return { bg: "rgba(255,217,61,0.07)", border: "rgba(255,217,61,0.25)", color: "#ffd93d", glowColor: "rgba(255,217,61,0.6)" };
   if (["APB Protocol", "UART", "CDC", "FSM"].includes(tag))
     return { bg: "rgba(0,245,255,0.07)", border: "rgba(0,245,255,0.25)", color: "#00f5ff", glowColor: "rgba(0,245,255,0.6)" };
   return { bg: "rgba(0,255,136,0.07)", border: "rgba(0,255,136,0.25)", color: "#00ff88", glowColor: "rgba(0,255,136,0.6)" };
