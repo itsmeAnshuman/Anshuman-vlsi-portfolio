@@ -4,52 +4,131 @@ import { styles } from "../../constants/styles";
 import { textVariant, fadeIn } from "../../utils/motion";
 import { useState } from "react";
 
-const skillCategories = [
+// Proficiency levels with their dot colors
+const PROF_COLORS: Record<string, string> = {
+  basic:        "#888888",
+  intermediate: "#1D9E75",
+  "above-int":  "#378ADD",
+  advanced:     "#BA7517",
+};
+
+type Proficiency = "basic" | "intermediate" | "above-int" | "advanced";
+
+interface TagEntry {
+  label: string;
+  prof?: Proficiency;
+}
+
+interface SkillCategory {
+  title: string;
+  subtitle: string;
+  color: string;
+  icon: string;
+  tags: TagEntry[];
+}
+
+const skillCategories: SkillCategory[] = [
   {
     title: "HDL Languages",
     subtitle: "Hardware Description",
     color: "#00f5ff",
     icon: "〈/〉",
-    tags: ["Verilog HDL", "SystemVerilog", "UVM", "Embedded C", "C"],
+    tags: [
+      { label: "Verilog HDL",  prof: "above-int" },
+      { label: "SystemVerilog", prof: "above-int" },
+      { label: "UVM",           prof: "basic" },
+      { label: "Embedded C",    prof: "intermediate" },
+      { label: "C",             prof: "intermediate" },
+    ],
   },
   {
     title: "EDA Tools",
     subtitle: "Design Automation",
     color: "#915EFF",
     icon: "⚙",
-    tags: ["Vivado 2023.1", "ModelSim", "QuestaSim", "EDA Playground", "Arduino IDE", "VSCode"],
+    tags: [
+      { label: "Vivado 2023.1" },
+      { label: "ModelSim" },
+      { label: "QuestaSim" },
+      { label: "Cadence Virtuoso" },
+      { label: "EDA Playground" },
+      { label: "Arduino IDE" },
+      { label: "VSCode" },
+    ],
   },
   {
     title: "Protocols",
     subtitle: "Bus & Serial Standards",
     color: "#00ff88",
     icon: "⇌",
-    tags: ["AXI4 Lite", "AHB", "APB", "UART", "SPI", "I2C"],
+    tags: [
+      { label: "AXI4 Lite" },
+      { label: "AHB" },
+      { label: "APB" },
+      { label: "UART" },
+      { label: "SPI" },
+      { label: "I2C" },
+    ],
   },
   {
     title: "Boards & Hardware",
     subtitle: "Physical Platforms",
     color: "#ffd93d",
     icon: "◈",
-    tags: ["Arduino", "NodeMCU ESP32", "Intel 8085", "ARM 32"],
+    tags: [
+      { label: "Arduino" },
+      { label: "NodeMCU ESP32" },
+      { label: "Intel 8085" },
+      { label: "ARM 32" },
+      { label: "Raspberry Pi 4" },
+    ],
   },
   {
-    title: "Theoretical Knowledge",
-    subtitle: "Core Foundations",
+    title: "Core Knowledge",
+    subtitle: "Digital Design Concepts",
     color: "#ff6b6b",
     icon: "∑",
-    tags: ["Digital Logic Design", "FSMs", "STA", "CDCs", "MOSFETs", "COA"],
+    tags: [
+      { label: "Digital Logic Design" },
+      { label: "FSMs" },
+      { label: "STA" },
+      { label: "CDCs" },
+      { label: "MOSFETs" },
+      { label: "COA" },
+    ],
+  },
+  {
+    title: "Dev Tools",
+    subtitle: "Version Control & Scripting",
+    color: "#a8b2c1",
+    icon: "{ }",
+    tags: [
+      { label: "Git / GitHub" },
+      { label: "Linux / Bash" },
+      { label: "Python" },
+    ],
   },
 ];
 
-const SkillTag = ({ tag, color }: { tag: string; color: string }) => {
+const profLegend: { prof: Proficiency; label: string }[] = [
+  { prof: "basic",        label: "Basic" },
+  { prof: "intermediate", label: "Intermediate" },
+  { prof: "above-int",    label: "Above Int." },
+  { prof: "advanced",     label: "Advanced" },
+];
+
+const SkillTag = ({ tag, color }: { tag: TagEntry; color: string }) => {
   const [hovered, setHovered] = useState(false);
+  const dotColor = tag.prof ? PROF_COLORS[tag.prof] : null;
+
   return (
     <span
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        display: "inline-block",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "6px",
         fontFamily: "'JetBrains Mono', monospace",
         fontSize: "11px",
         padding: "4px 12px",
@@ -64,14 +143,30 @@ const SkillTag = ({ tag, color }: { tag: string; color: string }) => {
         userSelect: "none",
       }}
     >
-      {tag}
+      {dotColor && (
+        <span
+          style={{
+            width: "6px",
+            height: "6px",
+            borderRadius: "50%",
+            background: dotColor,
+            flexShrink: 0,
+            boxShadow: hovered ? `0 0 4px ${dotColor}` : "none",
+            transition: "box-shadow 0.22s ease",
+          }}
+        />
+      )}
+      {tag.label}
     </span>
   );
 };
 
-const SkillCard = ({ category, index }: { category: typeof skillCategories[0]; index: number }) => {
+const SkillCard = ({ category, index }: { category: SkillCategory; index: number }) => {
   const [hovered, setHovered] = useState(false);
   const { title, subtitle, color, icon, tags } = category;
+
+  // check if any tag in this card has proficiency info
+  const hasProficiency = tags.some((t) => t.prof);
 
   return (
     <motion.div
@@ -188,6 +283,38 @@ const SkillCard = ({ category, index }: { category: typeof skillCategories[0]; i
         ))}
       </div>
 
+      {/* Proficiency legend — only on cards that have prof data */}
+      {hasProficiency && (
+        <div style={{
+          marginTop: "14px",
+          paddingTop: "10px",
+          borderTop: `1px solid ${color}18`,
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "10px",
+        }}>
+          {profLegend.map(({ prof, label }) => (
+            <span key={prof} style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "5px",
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "9px",
+              color: "rgba(180,200,220,0.4)",
+              letterSpacing: "0.5px",
+            }}>
+              <span style={{
+                width: "5px", height: "5px",
+                borderRadius: "50%",
+                background: PROF_COLORS[prof],
+                flexShrink: 0,
+              }} />
+              {label}
+            </span>
+          ))}
+        </div>
+      )}
+
       {/* Tag count */}
       <div style={{
         position: "absolute",
@@ -249,11 +376,8 @@ const Tech = () => {
       </motion.div>
 
       {/* Cards grid */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "20px",
-      }}
+      <div
+        style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}
         className="tech-grid"
       >
         {skillCategories.map((cat, i) => (

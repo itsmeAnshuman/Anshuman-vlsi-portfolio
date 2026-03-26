@@ -172,7 +172,28 @@ const About = () => {
               letterSpacing: "2px",
               marginTop: "4px",
             }}>
-              VLSI Design Engineer
+              Aspiring VLSI Design & Verification Engineer
+            </p>
+            <p style={{
+              fontFamily: "monospace",
+              fontSize: "11px",
+              color: "#00c853",
+              letterSpacing: "2px",
+              marginTop: "6px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "5px",
+            }}>
+              <span style={{
+                width: "7px",
+                height: "7px",
+                borderRadius: "50%",
+                background: "#00c853",
+                display: "inline-block",
+                boxShadow: "0 0 6px #00c853",
+              }} />
+              Open to Work
             </p>
           </div>
         </motion.div>
